@@ -133,25 +133,20 @@ function App() {
 
   function handleLogin (email, password) {
       return Auth.authorization(email, password)
-          .then( async (res) => {
-
-              const resp = await res.json()
-              console.log('ok', resp)
-              localStorage.setItem('token', resp)
+          .then((res) => res.json()
+            .then((data) =>{
+              localStorage.setItem('token', data.token)
               setLoggedIn(true)
               history.push('/')
-          })
+            }))
           .catch(err => console.log(`Не удалось войти ${checkResponse(err)}.`))
   }
 
   function handleRegister (email, password) {
       return Auth.register(email, password)
           .then((res) => {
-              localStorage.setItem('token', res.token)
               setIsInfoTooltipPopupOpen(true)
               setIsSuccessfulRegistration(true)
-              handleLogin(email, password)
-              history.push('/sing-in')
           })
           .catch(() => {
               setIsInfoTooltipPopupOpen(true)

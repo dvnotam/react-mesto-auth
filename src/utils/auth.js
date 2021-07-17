@@ -27,14 +27,13 @@ export function authorization (email, password) {
         },
         body: JSON.stringify({ email, password })
     })
-        .then((res) => res.json())
+        .then((res) => res)
 }
 
 export  function getToken (token) {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
         headers: {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
     })
