@@ -131,34 +131,29 @@ function App() {
     setIsInfoTooltipPopupOpen(false)
   }
 
-  function handleLogin (email, password) {
-      return Auth.authorization(email, password)
-          .then( async (res) => {
+    function handleLogin (email, password) {
+        return Auth.authorization(email, password)
+            .then((res) => res.json()
+                .then((data) =>{
+                    localStorage.setItem('token', data.token)
+                    setLoggedIn(true)
+                    history.push('/')
+                }))
+            .catch(err => console.log(`Не удалось войти ${checkResponse(err)}.`))
+    }
 
-              const resp = await res.json()
-              console.log('ok', resp)
-              localStorage.setItem('token', resp)
-              setLoggedIn(true)
-              history.push('/')
-          })
-          .catch(err => console.log(`Не удалось войти ${checkResponse(err)}.`))
-  }
-
-  function handleRegister (email, password) {
-      return Auth.register(email, password)
-          .then((res) => {
-              localStorage.setItem('token', res.token)
-              setIsInfoTooltipPopupOpen(true)
-              setIsSuccessfulRegistration(true)
-              handleLogin(email, password)
-              history.push('/sing-in')
-          })
-          .catch(() => {
-              setIsInfoTooltipPopupOpen(true)
-              setIsSuccessfulRegistration(false)
-          })
-          .catch(err => console.log(`Не удалось зарегистрироваться ${checkResponse(err)}.`))
-  }
+    function handleRegister (email, password) {
+        return Auth.register(email, password)
+            .then((res) => {
+                setIsInfoTooltipPopupOpen(true)
+                setIsSuccessfulRegistration(true)
+            })
+            .catch(() => {
+                setIsInfoTooltipPopupOpen(true)
+                setIsSuccessfulRegistration(false)
+            })
+            .catch(err => console.log(`Не удалось зарегистрироваться ${checkResponse(err)}.`))
+    }
 
   function handleLogOut () {
       localStorage.removeItem('token')
@@ -171,9 +166,10 @@ function App() {
       const token = localStorage.getItem('token')
       if(token) {
           Auth.getToken(token)
+              .then(res => res.json())
               .then((res) => {
-                  setUserEmail(res.data.email)
                   setLoggedIn(true)
+                  setUserEmail(res.data.email)
               })
               .catch(err => console.log(`Не удалось передать токен ${checkResponse(err)}.`))
       } else {

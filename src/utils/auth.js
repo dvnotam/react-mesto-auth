@@ -27,7 +27,7 @@ export function authorization (email, password) {
         },
         body: JSON.stringify({ email, password })
     })
-        .then((res) => res.json())
+        .then((res) => res)
 }
 
 export  function getToken (token) {
@@ -38,5 +38,6 @@ export  function getToken (token) {
             'Authorization': `Bearer ${token}`
         }
     })
-        .then((res) => checkResponse(res))
+        .then((res) => res)
+        .catch((err) => checkResponse(err))
 }

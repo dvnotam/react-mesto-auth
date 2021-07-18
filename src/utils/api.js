@@ -99,7 +99,7 @@ export const api = () => {
     return new Api({
         baseUrl: 'https://mesto.nomoreparties.co/v1/cohort-23',
         headers: {
-            'Authorization': `Barer ${token}`,
+            authorization: '003a5599-a194-411d-bc3c-1ecd4eb68232',
             "content-type": "application/json"
         }
     });
