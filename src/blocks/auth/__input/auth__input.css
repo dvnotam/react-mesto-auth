@@ -8,6 +8,7 @@
     border-right: none;
     background-color: black;
     outline: none;
+    font-size: 14px;
 }
 
 .auth__input:last-of-type {
