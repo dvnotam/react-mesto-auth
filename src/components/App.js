@@ -170,7 +170,6 @@ function App() {
               .then(res => res.json())
               .then((res) => {
                   setLoggedIn(true)
-                  setUserEmail(res.data.email)
               })
               .catch(err => console.log(`Не удалось передать токен ${checkResponse(err)}.`))
       } else {
