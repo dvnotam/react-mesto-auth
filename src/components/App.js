@@ -1,9 +1,9 @@
 import React from 'react'
-import { Route, Redirect, useHistory } from 'react-router-dom'
+import { Route, Switch, Redirect, useHistory } from 'react-router-dom'
 import '../index.css'
 import api from '../utils/api.js'
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js'
-import * as Auth from '../utils/auth.js'
+import * as auth from '../utils/auth.js'
 import ProtectedRoute from './ProtectedRoute.js'
 import Header from '../components/Header.js'
 import Login from './Login.js'
@@ -41,7 +41,7 @@ function App() {
 
   React.useEffect(() => {
       checkToken()
-  }, [loggedIn])
+  }, []) // поправил useEffect
 
   React.useEffect(() => {
     Promise.all([
@@ -132,10 +132,11 @@ function App() {
   }
 
     function handleLogin (email, password) {
-        return Auth.authorization(email, password)
+        return auth.authorization(email, password)
             .then((res) => res.json()
                 .then((data) =>{
                     localStorage.setItem('token', data.token)
+                    setUserEmail(email) // сохранил email пользователя в state
                     setLoggedIn(true)
                     history.push('/')
                 }))
@@ -143,7 +144,7 @@ function App() {
     }
 
     function handleRegister (email, password) {
-        return Auth.register(email, password)
+        return auth.register(email, password)
             .then((res) => {
                 setIsInfoTooltipPopupOpen(true)
                 setIsSuccessfulRegistration(true)
@@ -165,7 +166,7 @@ function App() {
   function checkToken () {
       const token = localStorage.getItem('token')
       if(token) {
-          Auth.getToken(token)
+          auth.getToken(token)
               .then(res => res.json())
               .then((res) => {
                   setLoggedIn(true)
@@ -182,7 +183,8 @@ function App() {
    <CurrentUserContext.Provider value={currentUser}>
      <div className="page">
        <Header loggedIn={loggedIn} userEmail={userEmail} onLogOut={handleLogOut} />
-       <ProtectedRoute path="/"
+       <ProtectedRoute exact
+                       path="/"
                        component={Main}
                        loggedIn={loggedIn}
                        onEditAvatar={handleEditAvatarClick}
@@ -193,15 +195,17 @@ function App() {
                        onCardDelete={handleCardDelete}
                        cards={cards}
        />
-        <Route exact path="/sign-up">
-            <Register onRegister={handleRegister} />
-        </Route>
-        <Route exact path="/sign-in">
-            <Login onLogin={handleLogin} />
-        </Route>
-        <Route>
-            {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in"/>}
-        </Route>
+        <Switch>
+            <Route exact path="/sign-up">
+                <Register onRegister={handleRegister} />
+            </Route>
+            <Route exact path="/sign-in">
+                <Login onLogin={handleLogin} />
+            </Route>
+            <Route>
+                {loggedIn ? <Redirect to="/" /> : <Redirect to="/sign-in"/>}
+            </Route>
+        </Switch>
        <Footer />
          {loggedIn &&
             <>
