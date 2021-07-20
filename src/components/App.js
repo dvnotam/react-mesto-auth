@@ -166,8 +166,8 @@ function App() {
       const token = localStorage.getItem('token')
       if(token) {
           auth.getToken(token)
-              .then(res => res.json())
               .then((res) => {
+                  setUserEmail(res.data.email)
                   setLoggedIn(true)
               })
               .catch(err => console.log(`Не удалось передать токен ${checkResponse(err)}.`))
