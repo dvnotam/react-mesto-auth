@@ -17,7 +17,6 @@ export function register (email, password) {
         },
         body: JSON.stringify({ email, password })
     })
-        .then((res) =>res.json())
         .then(res => checkResponse(res))
 }
 
@@ -41,5 +40,4 @@ export  function getToken (token) {
         }
     })
         .then((res) => res)
-        .catch((err) => checkResponse(err))
 }

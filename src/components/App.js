@@ -133,13 +133,12 @@ function App() {
 
     function handleLogin (email, password) {
         return auth.authorization(email, password)
-            .then((res) => res.json()
-                .then((data) =>{
-                    localStorage.setItem('token', data.token)
-                    setUserEmail(email) // сохранил email пользователя в state
-                    setLoggedIn(true)
-                    history.push('/')
-                }))
+            .then((data) =>{
+                localStorage.setItem('token', data.token)
+                setUserEmail(email) // сохранил email пользователя в state
+                setLoggedIn(true)
+                history.push('/')
+            })
             .catch(err => console.log(`Не удалось войти ${checkResponse(err)}.`))
     }
 
@@ -182,19 +181,19 @@ function App() {
    <CurrentUserContext.Provider value={currentUser}>
      <div className="page">
        <Header loggedIn={loggedIn} userEmail={userEmail} onLogOut={handleLogOut} />
-       <ProtectedRoute exact
-                       path="/"
-                       component={Main}
-                       loggedIn={loggedIn}
-                       onEditAvatar={handleEditAvatarClick}
-                       onEditProfile={handleEditProfileClick}
-                       onAddPlace={handleAddPlaceClick}
-                       onCardClick={handleCardClick}
-                       onCardLike={handleCardLike}
-                       onCardDelete={handleCardDelete}
-                       cards={cards}
-       />
         <Switch>
+            <ProtectedRoute exact
+                            path="/"
+                            component={Main}
+                            loggedIn={loggedIn}
+                            onEditAvatar={handleEditAvatarClick}
+                            onEditProfile={handleEditProfileClick}
+                            onAddPlace={handleAddPlaceClick}
+                            onCardClick={handleCardClick}
+                            onCardLike={handleCardLike}
+                            onCardDelete={handleCardDelete}
+                            cards={cards}
+            />
             <Route exact path="/sign-up">
                 <Register onRegister={handleRegister} />
             </Route>
