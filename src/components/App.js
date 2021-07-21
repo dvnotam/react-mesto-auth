@@ -139,7 +139,7 @@ function App() {
                 setLoggedIn(true)
                 history.push('/')
             })
-            .catch(err => console.log(`Не удалось войти ${checkResponse(err)}.`))
+            .catch(err => console.log(`Не удалось войти ${err}.`))
     }
 
     function handleRegister (email, password) {
@@ -152,7 +152,7 @@ function App() {
                 setIsInfoTooltipPopupOpen(true)
                 setIsSuccessfulRegistration(false)
             })
-            .catch(err => console.log(`Не удалось зарегистрироваться ${checkResponse(err)}.`))
+            .catch(err => console.log(`Не удалось зарегистрироваться ${err}.`))
     }
 
   function handleLogOut () {
@@ -170,7 +170,7 @@ function App() {
                   setUserEmail(res.data.email)
                   setLoggedIn(true)
               })
-              .catch(err => console.log(`Не удалось передать токен ${checkResponse(err)}.`))
+              .catch(err => console.log(`Не удалось передать токен ${err}.`))
       } else {
           console.log('У вас нет токена')
       }
